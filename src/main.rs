@@ -6,6 +6,7 @@ use awc::Client;
 use actix_proxy::{IntoHttpResponse, SendRequestError};
 use urlencoding::encode;
 
+
 #[derive(serde::Deserialize)]
 struct BoarState {
     url: String,
@@ -50,7 +51,6 @@ async fn gateway(data: web::Data<BoarState>, path: web::Path<(String,)>, ) -> Re
 }
 
 
-
 fn get_configuration() -> BoarState {
 	let settings = config::Config::builder()
 		.add_source(config::File::new("configuration.yaml", config::FileFormat::Yaml))
@@ -61,8 +61,6 @@ fn get_configuration() -> BoarState {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-	
-
     HttpServer::new(|| {
 		let config = get_configuration();
 		println!("{}", config.url);
@@ -72,7 +70,7 @@ async fn main() -> std::io::Result<()> {
 			.service(gateway)
 			.service(proxy)
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("127.0.0.1", 8000))?
     .run()
     .await
 }
