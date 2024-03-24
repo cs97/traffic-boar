@@ -2,10 +2,9 @@
 use actix_web::{get, web, HttpResponse};
 use actix_web::HttpServer;
 use actix_web::App;
-
 use awc::Client;
-
 use actix_proxy::{IntoHttpResponse, SendRequestError};
+use urlencoding::encode;
 
 #[derive(serde::Deserialize)]
 struct BoarState {
@@ -30,7 +29,7 @@ async fn proxy(data: web::Data<BoarState>, path: web::Path<(String,)>, ) -> Resu
 
 	let (url,) = path.into_inner();
 
-	let url = format!("{}/{}", &data.url, url);
+	let url = format!("{}/{}", &data.url, encode(&url));
 
 	let client = Client::default();
 
@@ -43,7 +42,7 @@ async fn gateway(data: web::Data<BoarState>, path: web::Path<(String,)>, ) -> Re
 
 	let (url,) = path.into_inner();
 
-	let url = format!("{}/{}", &data.api_url, url);
+	let url = format!("{}/{}", &data.api_url, encode(&url));
 
 	let client = Client::default();
 
