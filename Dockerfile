@@ -1,4 +1,9 @@
-FROM debian
+FROM debian:12-slim
+
+RUN <<EOF
+apt-get update
+apt-get install -y certbot
+EOF
 
 WORKDIR /app
 
